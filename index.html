@@ -3,13 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>One Football</title>
+    <title>One Soccer</title>
     <link rel="stylesheet" href="css/materialize.min.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 <body>
     <!-- Navigasi -->
+    
+    <nav class="blue darken-4" role="navigation">
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo" id="logo-container">One Soccer</a>
+            <a href="#" class="sidenav-trigger" data-target="nav-mobile"><i class="material-icons">menu</i></a>
+    
+            <ul class="topnav right hide-on-med-and-down"></ul>
+            <ul class="sidenav" id="nav-mobile"></ul>
+        </div>
+    </nav>
 
+    <!-- Akhir navigasi -->
+
+    <div class="container" id="body-content"></div>
 
     <script src="js/materialize.min.js"></script>
+    <script src="js/nav.js"></script>
 </body>
 </html>
