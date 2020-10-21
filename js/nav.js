@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded",() => {
-    const navigasi = document.querySelectorAll(".sidenav");
-    M.Sidenav.init(navigasi);
+    // const navigasi = document.querySelectorAll(".sidenav");
+    // M.Sidenav.init(navigasi);
+    M.AutoInit();
 
     loadNav();
 
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded",() => {
 
     let page = location.hash.substr(1);
 
-    if(page=="") page = "home";
+    if(page=="") page = "matches";
     loadPage(page);
 
     function loadPage(page){
@@ -55,6 +56,9 @@ document.addEventListener("DOMContentLoaded",() => {
             }
         };
 
+        if(page=="matches") getMatches();
+        if(page=="competitions") getCompetitions();
+        
         xmlHttp.open("GET",`pages/${page}.html`,true);
         xmlHttp.send();
     }
