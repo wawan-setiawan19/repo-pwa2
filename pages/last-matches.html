@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One Soccer</title>
-    <link rel="stylesheet" href="css/materialize.min.css">
+    <link rel="stylesheet" href="../css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#0d47a1"/>
+    <meta name="theme-color" content="#0d47a1" />
     <link rel="apple-touch-icon" href="/img/logo.png" />
 </head>
+
 <body>
     <!-- Navigasi -->
-    
+
     <nav class="blue darken-4" role="navigation">
         <div class="nav-wrapper container">
             <a href="#" class="brand-logo" id="logo-container">One Soccer</a>
-            <a href="#" class="sidenav-trigger" data-target="nav-mobile"><i class="material-icons">menu</i></a>
-    
+            <a href="../index.html" class="sidenav-trigger" data-target="nav-mobile">
+                <i class="material-icons">arrow_back</i>
+            </a>
             <ul class="topnav right hide-on-med-and-down"></ul>
             <ul class="sidenav" id="nav-mobile"></ul>
         </div>
@@ -29,12 +32,13 @@
     <div class="container" id="body-content"></div>
 
     <script type="text/javascript" src="https://unpkg.com/snarkdown@1.0.2/dist/snarkdown.umd.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/materialize.min.js"></script>
-    <script src="js/nav.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/matches.js"></script>
-    <script src="js/competitions.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/materialize.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/matches.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded",getMatchesById());
+    </script>
 </body>
-</html>
 
+</html>
