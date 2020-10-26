@@ -1,4 +1,4 @@
-const CACHE_NAME = "one-soccer-v1.04";
+const CACHE_NAME = "one-soccer-v1.06";
 const urlsToCache = [
     "/",
     "/components/nav.html",
@@ -8,14 +8,17 @@ const urlsToCache = [
     "/img/logo.png",
     "/js/api.js",
     "/js/competitions.js",
+    "/js/db.js",
+    "/js/idb.js",
     "/js/main.js",
     "/js/matches.js",
     "/js/materialize.min.js",
     "/js/nav.js",
     "/pages/competitions.html",
-    "/pages/favourites.html",
+    "/pages/detail-competitions.html",
     "/pages/last-matches.html",
     "/pages/matches.html",
+    "/pages/saved.html",
     "/.eslintrc.json",
     "/index.html",
     "/manifest.json",
