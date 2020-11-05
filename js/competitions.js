@@ -1,6 +1,7 @@
-function competitions(data){
+function showCompetitions(data){
     let articlesHTML = "";
-        data.competitions.forEach((article)=>{
+    data.competitions.forEach(article => {
+        if(article.plan == "TIER_ONE"){
             let emblem = article.area.ensignUrl;
             if(emblem == null) {
                 emblem = "img/Fifa.svg";
@@ -8,60 +9,60 @@ function competitions(data){
                     emblem = article.emblemUrl;
                 }
             };
-
-        articlesHTML+= `
-            <div class="col s12 m6 l4">
-                <div class="card">
-                    <div class="card-image">
-                        <a href="./pages/detail-competitions.html?id=${article.id}">
-                            <img class="emblem responsive-img" src="${emblem}">
-                        </a>
-                    </div>
-
-                    <div class="card-content">
-                        <h5 class="truncate">${article.name}</h5>
-                        <p>${article.area.name}</p
-                        <p>Matchday ${article.currentSeason.currentMatchday}</p>
+            let matchDay = "";
+            if(article.currentSeason === null) matchDay = "0";
+    
+                articlesHTML += `
+                <div class="col s12 m6 l4">
+                    <div class="card">
+                        <div class="card-image">
+                            <a href="./pages/detail-competitions.html?id=${article.id}">
+                                <img class="emblem responsive-img" src="${emblem}" alt="logo-competitions">
+                            </a>
+                        </div>
+    
+                        <div class="card-content">
+                            <h5 class="truncate">${article.name}</h5>
+                            <p>${article.area.name}</p
+                            <p>Matchday ${matchDay}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            `;
-        });
+                `;
+            }
+    });
     document.getElementById("competitions").innerHTML = articlesHTML;
 }
 
 function getCompetitions(){
     if('caches' in window){
-        caches.match(`${baseUrl}competitions/?plan=TIER_ONE`).then((response)=>{
+        caches.match(`${baseUrl}competitions/`).then(response => {
             if(response){
-                response.json().then((data)=>{
-                    competitions(data);
-                    document.querySelector(".progress").className= " hidden";
+                response.json().then(data => {
+                    showCompetitions(data);
+                    document.querySelector(".progress").className = " hidden";
                 });
             }
         });
     }
     
-    fetch(`${baseUrl}competitions/?plan=TIER_ONE`,{method:methodUse,headers:AuthToken})
+    fetch(`${baseUrl}competitions/`,{method:methodUse,headers:AuthToken})
         .then(status)
         .then(json)
-        .then((data)=>{
-            document.querySelector(".progress").className= " hidden";
-            competitions(data);
+        .then(data => {
+            document.querySelector(".progress").className = " hidden";
+            showCompetitions(data);
         })
         .catch(error);
 }
 
-function getCompetitionsById(){
-    return new Promise((resolve, reject)=>{
-        const urlParams = new URLSearchParams(window.location.search);
-        const idParam = urlParams.get("id");
-        let tableStandings = "";
-        let detailCompetition = `
+function showDetailCompetitions(){
+    let detailCompetition = "";
+    detailCompetition = `
             <div class="row">
                 <div class="col s12 m8">
                     <div class="card">
-                        <h5 class="grey-text">Standing Tables</h5>
+                        <h5>Standing Tables</h5>
                         <table id="standings"></table>
                     </div>
                 </div>
@@ -81,11 +82,20 @@ function getCompetitionsById(){
                 </div>
             </div>
         `;
+    document.getElementById("body-content").innerHTML = detailCompetition;
+}
+
+function getCompetitionsById(){
+    return new Promise((resolve, reject) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idParam = urlParams.get("id");
+        let tableStandings = "";
+        showDetailCompetitions();
 
         if('caches' in window){
-            caches.match(`${baseUrl}competitions/${idParam}/standings`).then((response)=>{
+            caches.match(`${baseUrl}competitions/${idParam}/standings`).then(response => {
                 if(response){
-                    response.json().then((data)=>{
+                    response.json().then(data => {
                         getStandings(data);
                         resolve(data);
                     });
@@ -96,12 +106,11 @@ function getCompetitionsById(){
         fetch(`${baseUrl}competitions/${idParam}/standings`,{method:methodUse,headers:AuthToken})
             .then(status)
             .then(json)
-            .then((data)=>{
+            .then(data => {
                 getStandings(data);
                 resolve(data);
             })
             .catch(error);
-        document.getElementById("body-content").innerHTML = detailCompetition;
     });
 }
 
@@ -115,7 +124,7 @@ function getStandings(data){
         <th>Lose</th>
         <th>Points</th>
     </tr>`;
-    data.standings[0].table.forEach((dataTable)=>{
+    data.standings[0].table.forEach(dataTable=>{
         tableStandings += `
             <tr>
                 <td class="center">${dataTable.position}</td>
@@ -130,3 +139,33 @@ function getStandings(data){
     document.getElementById("standings").innerHTML = tableStandings;
     });
 };
+
+function getSavedCompetitions(){
+    getAll().then((competitions) => {
+        let savedContent = "";
+        competitions.forEach(data => {
+            savedContent += `
+                <div class="col s12">
+                    <a href="../pages/detail-competitions.html?id=${data.id}&saved=true">
+                        <div class="card">
+                            <div class="card-content">
+                                <h5>${data.name}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `;
+        });
+        document.getElementById("saved").innerHTML = savedContent;
+    });
+}
+
+function getSavedCompetitionsById(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const idParam = urlParams.get("id");
+
+    getById(idParam).then(competitions => {
+        showDetailCompetitions();
+        getStandings(competitions);
+    });
+}

@@ -1,6 +1,6 @@
 function matches(data){
     let articlesHTML = "";
-    data.matches.forEach((article)=>{
+    data.matches.forEach(article => {
         let scoreHome = article.score.fullTime.homeTeam;
         let scoreAway = article.score.fullTime.awayTeam;
         articlesHTML += `
@@ -26,13 +26,19 @@ function matches(data){
 }
 
 function getMatches(){
-    const date = new Date().getDate()-1;
-    const month = new Date().getMonth()+1;
+    let date = new Date().getDate()-1;
+    let month = new Date().getMonth()+1;
     const year = new Date().getFullYear();
+
+    if(date<10) date = `0${date}`;
+    if(month<10) month = `0${month}`;
+
+    console.log(date);
+
     if('caches' in window){
         caches.match(`${baseUrl}matches/?dateTo=${year}-${month}-${date}&dateFrom=${year}-${month}-${date}`).then((response)=>{
             if(response){
-                response.json().then((data)=>{
+                response.json().then(data => {
                     document.querySelector(".progress").className= " hidden";
                     matches(data);
                     M.AutoInit();
@@ -44,7 +50,7 @@ function getMatches(){
     fetch(`${baseUrl}matches/?dateTo=${year}-${month}-${date}&dateFrom=${year}-${month}-${date}`,{method:methodUse,headers:AuthToken})
         .then(status)
         .then(json)
-        .then((data)=>{
+        .then(data => {
             matches(data);
             document.querySelector(".progress").className= " hidden";
             M.AutoInit();
@@ -53,7 +59,7 @@ function getMatches(){
 }
 
 function getMatchesById(){
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve,reject) => {
     const urlParams = new URLSearchParams(window.location.search);
     const idParam = urlParams.get("id");
 
@@ -61,19 +67,18 @@ function getMatchesById(){
     let idAway = "";
     let logoHome = "";
     let logoAway = "";
-    let detailMatch = "";
 
     if("caches" in window){
         caches.match(`${baseUrl}matches/${idParam}`).then((response)=>{
             if(response){
-                response.json().then((data)=>{
+                response.json().then(data => {
                     idHome = data.match.homeTeam.id;
                     idAway = data.match.awayTeam.id;
                     showDetail(data);
                     if('caches' in window){
                         caches.match(`${baseUrl}teams/${idHome}`).then((response)=>{
                             if(response){
-                                response.json().then((data)=>{
+                                response.json().then(data => {
                                     logoHome = data.crestUrl;
                                     document.getElementById("logoHome").setAttribute("src",logoHome);
                                     console.log(logoHome);
@@ -84,7 +89,7 @@ function getMatchesById(){
                     if('caches' in window){
                         caches.match(`${baseUrl}teams/${idAway}`).then((response)=>{
                             if(response){
-                                response.json().then((data)=>{
+                                response.json().then(data => {
                                     logoAway = data.crestUrl;
                                     document.getElementById("logoAway").setAttribute("src",logoAway);
                                     console.log(logoAway);
@@ -102,14 +107,14 @@ function getMatchesById(){
     fetch(`${baseUrl}matches/${idParam}`,{method:methodUse,headers:AuthToken})
         .then(status)
         .then(json)
-        .then((data)=>{
+        .then(data => {
             idHome = data.match.homeTeam.id;
             idAway = data.match.awayTeam.id;
 
             fetch(`${baseUrl}teams/${idHome}`,{method:methodUse,headers:AuthToken})
                 .then(status)
                 .then(json)
-                .then((data)=>{
+                .then(data => {
                     logoHome = data.crestUrl;
                     document.getElementById("logoHome").setAttribute("src",logoHome);
                 });
@@ -117,7 +122,7 @@ function getMatchesById(){
             fetch(`${baseUrl}teams/${idAway}`,{method:methodUse,headers:AuthToken})
                 .then(status)
                 .then(json)
-                .then((data)=>{
+                .then(data => {
                     logoAway = data.crestUrl;
                     document.getElementById("logoAway").setAttribute("src",logoAway);
                 });
